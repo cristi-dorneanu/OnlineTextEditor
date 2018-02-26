@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.texteditor.model.dao.UserDAO;
+import com.texteditor.model.dao.jdbc.UserDAOImpl;
 import com.texteditor.model.domain.User;
 
 public class LoginServlet extends HttpServlet {
@@ -18,7 +20,16 @@ public class LoginServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		this.getServletContext().getRequestDispatcher("/authentication/login.jsp").forward(req, resp);
+		String requestUri = req.getRequestURI();
+		String url = "/";
+		
+		if(requestUri.endsWith("/login")) {
+			url = "/authentication/login.jsp";
+		} else if (requestUri.endsWith("/signup")) {
+			url = "/authentication/signup.jsp";
+		}
+		
+		this.getServletContext().getRequestDispatcher(url).forward(req, resp);
 	}
 
 	@Override
@@ -39,6 +50,25 @@ public class LoginServlet extends HttpServlet {
 			} else {
 				url = "/authentication/loginErr.jsp";
 			}
+		} else if (requestUri.endsWith("/signup")) {
+			User user = new User();
+			UserDAO userDao = new UserDAOImpl();
+			String signupStatus = "unsuccessfull";
+			
+			user.setFirstName(req.getParameter("firstName"));
+			user.setLastName(req.getParameter("lastName"));
+			user.setEmail(req.getParameter("email"));
+			user.setUsername(req.getParameter("username"));
+			user.setPassword(req.getParameter("password"));
+			
+			req.setAttribute("user", user);
+			url = "/authentication/signupSucc.jsp";
+			
+			if(userDao.insert(user)) {
+				signupStatus = "successfull";
+			}
+			
+			req.setAttribute("signupStatus", signupStatus);
 		}
 		
 		this.getServletContext().getRequestDispatcher(url).forward(req, resp);
