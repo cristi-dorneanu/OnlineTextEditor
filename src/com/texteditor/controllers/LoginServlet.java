@@ -6,7 +6,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.texteditor.model.business.Authenticator;
 import com.texteditor.model.dao.UserDAO;
 import com.texteditor.model.dao.jdbc.UserDAOImpl;
 import com.texteditor.model.domain.User;
@@ -36,23 +38,29 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String requestUri = req.getRequestURI();
 		String url = "/";
+		UserDAO userDao = new UserDAOImpl();
 		
 		if(requestUri.endsWith("/login")) {
 			String username = req.getParameter("username");
+			String password = req.getParameter("password");
 			
 			User user = new User();
 			user.setUsername(username);
+			user.setPassword(password);
 			
 			req.setAttribute("user", user);
 			
-			if(isLoginSucc(username)) {
+			if(Authenticator.login(user, userDao)) {
+				User currentLoggedUser = userDao.getUserByUsername(user.getUsername());
+				HttpSession session = req.getSession(true);
+				session.setAttribute("currentLoggedUser", currentLoggedUser);
+				
 				url = "/authentication/loginSucc.jsp";
 			} else {
 				url = "/authentication/loginErr.jsp";
 			}
 		} else if (requestUri.endsWith("/signup")) {
 			User user = new User();
-			UserDAO userDao = new UserDAOImpl();
 			String signupStatus = "unsuccessfull";
 			
 			user.setFirstName(req.getParameter("firstName"));
