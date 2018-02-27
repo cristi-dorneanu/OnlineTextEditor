@@ -1,0 +1,28 @@
+USE online_text_editor;
+
+DROP TABLE IF EXISTS User;
+
+CREATE TABLE USER(id BIGINT NOT NULL AUTO_INCREMENT,
+				  first_name VARCHAR(50),
+                  last_name VARCHAR(50),
+                  email VARCHAR(200) NOT NULL UNIQUE,
+                  username VARCHAR(50) NOT NULL UNIQUE,
+                  password VARCHAR(100) NOT NULL,
+                  primary key(id)
+                )
+
+CREATE TABLE FILE(
+		id BIGINT NOT NULL AUTO INCREMENT,
+		file_name VARCHAR(50) NOT NULL,
+		file_path VARCHAR(100) NOT NULL UNIQUE,
+		size_in_bytes BIGINT NOT NULL,
+		date_added DATE NOT NULL,
+		date_last_modified DATE NOT NULL
+		primary key(id))
+
+CREATE TABLE USER_TO_FILES(
+	id_user BIGINT,
+	id_file BIGINT,
+	foreign key(id_user) REFERENCES USER(id),
+	foreign key(id_file) REFERENCES FILE(id)
+	)
