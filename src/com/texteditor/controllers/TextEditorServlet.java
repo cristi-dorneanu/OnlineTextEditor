@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.texteditor.model.business.Authenticator;
+import com.texteditor.model.config.Resource;
+import com.texteditor.model.dao.jdbc.UserDAOImpl;
 import com.texteditor.model.domain.User;
+import com.texteditor.utils.ControllerUtils;
 
 public class TextEditorServlet  extends HttpServlet{
 
@@ -22,15 +25,15 @@ public class TextEditorServlet  extends HttpServlet{
 		String uri = req.getRequestURI();
 		String url = "/";
 		
-		if(uri.endsWith("/textedit")) {
+		if(ControllerUtils.isPath(uri, Resource.textedit)) {
 			User loggedUser = (User) req.getSession().getAttribute("currentLoggedUser");
 			
-			if (!Authenticator.isValidUser(loggedUser)) {
-				resp.sendRedirect("/login");
+			if (!Authenticator.login(loggedUser, new UserDAOImpl())) {
+				resp.sendRedirect(Resource.login.url());
 				return;
 			}
 			
-			url = "/textedit.jsp";
+			url = "/editor/textedit.jsp";
 		}
 		
 		getServletContext().getRequestDispatcher(url).forward(req, resp);
@@ -39,13 +42,12 @@ public class TextEditorServlet  extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();
-		String url = "/";
 		
-		if(uri.endsWith("/textedit")) {
+		if(ControllerUtils.isPath(uri, Resource.textedit)) {
 			User loggedUser = (User) req.getSession().getAttribute("currentLoggedUser");
 			
-			if (!Authenticator.isValidUser(loggedUser)) {
-				resp.sendRedirect("/login");
+			if (!Authenticator.login(loggedUser, new UserDAOImpl())) {
+				resp.sendRedirect(Resource.login.url());
 				return;
 			}
 		}

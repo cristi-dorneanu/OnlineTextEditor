@@ -11,8 +11,8 @@ import java.sql.PreparedStatement;
 
 import com.texteditor.model.dao.UserDAO;
 import com.texteditor.model.database.ConnectionFactory;
-import com.texteditor.model.database.DbUtils;
 import com.texteditor.model.domain.User;
+import com.texteditor.utils.DbUtils;
 
 public class UserDAOImpl implements UserDAO{
 

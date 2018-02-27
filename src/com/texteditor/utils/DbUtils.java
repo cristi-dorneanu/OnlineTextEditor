@@ -1,4 +1,4 @@
-package com.texteditor.model.database;
+package com.texteditor.utils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

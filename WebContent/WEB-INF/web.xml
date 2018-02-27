@@ -8,6 +8,16 @@
 		<servlet-name>LoginServlet</servlet-name>
 		<servlet-class>com.texteditor.controllers.LoginServlet</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>TextEditorServlet</servlet-name>
+		<servlet-class>com.texteditor.controllers.TextEditorServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>TextEditorServlet</servlet-name>
+		<url-pattern>/textedit</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>

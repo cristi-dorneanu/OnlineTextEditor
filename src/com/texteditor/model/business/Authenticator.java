@@ -2,10 +2,11 @@ package com.texteditor.model.business;
 
 import com.texteditor.model.dao.UserDAO;
 import com.texteditor.model.domain.User;
+import com.texteditor.utils.ControllerUtils;
 
 public class Authenticator {
 	public static boolean login(User user, UserDAO userDao) {
-		if(!isValidUser(user)) {
+		if(!ControllerUtils.isValidUserLogin(user)) {
 			return false;
 		}
 		
@@ -17,13 +18,4 @@ public class Authenticator {
 		return false;
 	}
 	
-	public static boolean isValidUser(User user) {
-		if(user == null || user.getUsername() == null || user.getUsername().trim().isEmpty() ||
-				user.getPassword() == null || user.getPassword().trim().isEmpty()) 
-			{
-				return false;
-			}
-		
-		return false;
-	}
 }

@@ -8,6 +8,8 @@
 </head>
 <body>
 
+	<h1>Sign up ${signupStatus}</h1>
+
 	<form action="signup" method="post">
 		<label for="firstName">First Name</label> <input type="text"
 			name="firstName" required><br> <label for="lastName">Last

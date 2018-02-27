@@ -6,12 +6,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.texteditor.model.business.Authenticator;
+import com.texteditor.model.config.Resource;
 import com.texteditor.model.dao.UserDAO;
 import com.texteditor.model.dao.jdbc.UserDAOImpl;
 import com.texteditor.model.domain.User;
+import com.texteditor.utils.ControllerUtils;
 
 public class LoginServlet extends HttpServlet {
 
@@ -25,9 +26,9 @@ public class LoginServlet extends HttpServlet {
 		String requestUri = req.getRequestURI();
 		String url = "/";
 		
-		if(requestUri.endsWith("/login")) {
+		if(ControllerUtils.isPath(requestUri, Resource.login)) {
 			url = "/authentication/login.jsp";
-		} else if (requestUri.endsWith("/signup")) {
+		} else if (ControllerUtils.isPath(requestUri, Resource.signup)) {
 			url = "/authentication/signup.jsp";
 		}
 		
@@ -37,43 +38,34 @@ public class LoginServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String requestUri = req.getRequestURI();
-		String url = "/";
+		String url = "/authentication/login.jsp";
 		UserDAO userDao = new UserDAOImpl();
 		
-		if(requestUri.endsWith("/login")) {
-			String username = req.getParameter("username");
-			String password = req.getParameter("password");
-			
-			User user = new User();
-			user.setUsername(username);
-			user.setPassword(password);
-			
+		if(ControllerUtils.isPath(requestUri, Resource.login)) {
+			User user = ControllerUtils.constructUserFromRequest(req);
 			req.setAttribute("user", user);
 			
 			if(Authenticator.login(user, userDao)) {
 				User currentLoggedUser = userDao.getUserByUsername(user.getUsername());
-				HttpSession session = req.getSession(true);
-				session.setAttribute("currentLoggedUser", currentLoggedUser);
 				
-				url = "/authentication/loginSucc.jsp";
-			} else {
-				url = "/authentication/loginErr.jsp";
+				req.getSession(true).setAttribute("currentLoggedUser", currentLoggedUser);
+				resp.sendRedirect(Resource.textedit.url());
+				
+				return;
 			}
-		} else if (requestUri.endsWith("/signup")) {
-			User user = new User();
+		} else if (ControllerUtils.isPath(requestUri, Resource.signup)) {
 			String signupStatus = "unsuccessfull";
 			
-			user.setFirstName(req.getParameter("firstName"));
-			user.setLastName(req.getParameter("lastName"));
-			user.setEmail(req.getParameter("email"));
-			user.setUsername(req.getParameter("username"));
-			user.setPassword(req.getParameter("password"));
+			User user = ControllerUtils.constructUserFromRequest(req);
 			
 			req.setAttribute("user", user);
-			url = "/authentication/signupSucc.jsp";
+			url = "/authentication/signup.jsp";
 			
 			if(userDao.insert(user)) {
-				signupStatus = "successfull";
+				req.getSession(true).setAttribute("currentLoggedUser", user);
+				resp.sendRedirect(Resource.textedit.url());
+				
+				return;
 			}
 			
 			req.setAttribute("signupStatus", signupStatus);
@@ -82,7 +74,4 @@ public class LoginServlet extends HttpServlet {
 		this.getServletContext().getRequestDispatcher(url).forward(req, resp);
 	}
 
-	private boolean isLoginSucc(String username) {
-		return username.equalsIgnoreCase("test");
-	}
 }
