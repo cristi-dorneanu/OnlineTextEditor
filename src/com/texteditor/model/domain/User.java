@@ -15,6 +15,7 @@ public class User implements Serializable{
 	private String email;
 	private String firstName;
 	private String lastName;
+	private String serverRootPath;
 	
 	public User() {
 		this.id = -1;
@@ -23,6 +24,7 @@ public class User implements Serializable{
 		this.email = "";
 		this.firstName = "";
 		this.lastName = "";
+		this.serverRootPath = "";
 	}
 
 	public long getId() {
@@ -72,6 +74,13 @@ public class User implements Serializable{
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
 
+	public String getServerRootPath() {
+		return serverRootPath;
+	}
+
+	public void setServerRootPath(String serverRootPath) {
+		this.serverRootPath = serverRootPath;
+	}
+	
 }

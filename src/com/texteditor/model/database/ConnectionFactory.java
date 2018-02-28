@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
-    public static final String URL = "jdbc:mysql://localhost:3306/online_text_editor";
+    public static final String URL = "jdbc:mysql://DESKTOP-F92U4QA:3306/online_text_editor";
     public static final String USER = "root";
     public static final String PASS = "Dorni593";
     

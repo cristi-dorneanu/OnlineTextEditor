@@ -6,7 +6,7 @@ public enum Resource {
 	textedit("/textedit"),
 	manage("/manage");
 	
-	private static final String app = "/OnlineTextEditorWork";
+	private static final String app = "/OnlineTextEditor";
 	private String resource;
 	
 	private Resource(String resource) {

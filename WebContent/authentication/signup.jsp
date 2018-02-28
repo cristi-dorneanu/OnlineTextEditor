@@ -11,15 +11,22 @@
 	<h1>Sign up ${signupStatus}</h1>
 
 	<form action="signup" method="post">
-		<label for="firstName">First Name</label> <input type="text"
-			name="firstName" required><br> <label for="lastName">Last
-			Name</label> <input type="text" name="lastName" required><br> <label
-			for="email">Email</label> <input type="email" name="email" required><br>
+		<label for="firstName">First Name</label> 
+		<input type="text"name="firstName" required><br> 
+		
+		<label for="lastName">LastName</label> 
+		<input type="text" name="lastName" required><br>
+		
+		 <label	for="email">Email</label> 
+		 <input type="email" name="email" required><br>
 
-		<label for="username">Username</label> <input type="text"
-			name="username" required><br> <label for="password">Password</label>
-		<input type="password" name="password" required><br> <input
-			type="submit" name="signup" value="Sign Up">
+		<label for="username">Username</label> 
+		<input type="text" name="username" required><br> 
+		
+		<label for="password">Password</label>
+		<input type="password" name="password" required><br> 
+		
+		<input type="submit" name="signup" value="Sign Up">
 	</form>
 </body>
 </html>

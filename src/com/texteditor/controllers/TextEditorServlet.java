@@ -42,13 +42,17 @@ public class TextEditorServlet  extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();
+		String action = req.getParameter("action");
+		
+		User loggedUser = (User) req.getSession().getAttribute("currentLoggedUser");
+		
+		if (!Authenticator.login(loggedUser, new UserDAOImpl())) {
+			resp.sendRedirect(Resource.login.url());
+			return;
+		}
 		
 		if(ControllerUtils.isPath(uri, Resource.textedit)) {
-			User loggedUser = (User) req.getSession().getAttribute("currentLoggedUser");
-			
-			if (!Authenticator.login(loggedUser, new UserDAOImpl())) {
-				resp.sendRedirect(Resource.login.url());
-				return;
+			if (action.equals("save")) {
 			}
 		}
 	}
