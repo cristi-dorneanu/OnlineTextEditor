@@ -8,16 +8,17 @@ CREATE TABLE USER(id BIGINT NOT NULL AUTO_INCREMENT,
                   email VARCHAR(200) NOT NULL UNIQUE,
                   username VARCHAR(50) NOT NULL UNIQUE,
                   password VARCHAR(100) NOT NULL,
+                  relative_path VARCHAR(250) NOT NULL UNIQUE,
                   primary key(id)
                 )
 
-CREATE TABLE FILE(
-		id BIGINT NOT NULL AUTO INCREMENT,
+CREATE TABLE FILES(
+		id BIGINT NOT NULL AUTO_INCREMENT,
 		file_name VARCHAR(50) NOT NULL,
 		file_path VARCHAR(100) NOT NULL UNIQUE,
 		size_in_bytes BIGINT NOT NULL,
 		date_added DATE NOT NULL,
-		date_last_modified DATE NOT NULL
+		date_last_modified DATE NOT NULL,
 		primary key(id))
 
 CREATE TABLE USER_TO_FILES(
