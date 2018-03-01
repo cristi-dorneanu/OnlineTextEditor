@@ -61,7 +61,7 @@ public class LoginServlet extends HttpServlet {
 			req.setAttribute("user", user);
 			url = "/authentication/signup.jsp";
 			
-			if(userDao.insert(user)) {
+			if(Authenticator.signup(user, userDao)) {
 				req.getSession(true).setAttribute("currentLoggedUser", user);
 				resp.sendRedirect(Resource.textedit.url());
 				

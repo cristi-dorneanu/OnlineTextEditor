@@ -18,4 +18,19 @@ public class Authenticator {
 		return false;
 	}
 	
+	public static boolean signup(User user, UserDAO userDao) {
+		if(!ControllerUtils.isValidUserSignup(user)) {
+			return false;
+		}
+		
+		String serverPath = FileManager.generateServerRelativePath(user);
+		user.setServerRelativePath(serverPath);
+		
+		if(userDao.insert(user)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

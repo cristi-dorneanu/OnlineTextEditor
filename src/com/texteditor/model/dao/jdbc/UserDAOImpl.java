@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO{
 		
 		try {
 			conn = ConnectionFactory.getConnection();
-			stmt = conn.prepareStatement("INSERT INTO user (first_name, last_name, email, username, password) VALUES(?, ?, ?, ?, ?)");
+			stmt = conn.prepareStatement("INSERT INTO user (first_name, last_name, email, username, password, relative_path) VALUES(?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			
 			int index = 1;
 			stmt.setString(index++, DbUtils.trim(user.getFirstName()));
@@ -32,11 +32,14 @@ public class UserDAOImpl implements UserDAO{
 			stmt.setString(index++, DbUtils.trim(user.getEmail()));
 			stmt.setString(index++, DbUtils.trim(user.getUsername()));
 			stmt.setString(index++, DbUtils.trim(user.getPassword()));
+			stmt.setString(index++, DbUtils.trim(user.getServerRelativePath()));
 			
 			stmt.executeUpdate();
 			
-			long id = this.getUserId(conn);
-			user.setId(id);
+			rs = stmt.getGeneratedKeys();
+			rs.next();
+			
+			user.setId(rs.getInt(1));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -140,14 +143,15 @@ public class UserDAOImpl implements UserDAO{
 		
 		try {
 			conn = ConnectionFactory.getConnection();
-			stmt = conn.prepareStatement("UPDATE User SET first_name = ?, last_name = ?, email = ?, username = ?, password = ? WHERE id = ?");
+			stmt = conn.prepareStatement("UPDATE User SET first_name = ?, last_name = ?, email = ?, username = ?, password = ?, relative_path = ? WHERE id = ?");
 			
 			int index = 1;
-			stmt.setString(index++, user.getFirstName());
-			stmt.setString(index++, user.getLastName());
-			stmt.setString(index++, user.getEmail());
-			stmt.setString(index++, user.getUsername());
-			stmt.setString(index++, user.getPassword());
+			stmt.setString(index++, DbUtils.trim(user.getFirstName()));
+			stmt.setString(index++, DbUtils.trim(user.getLastName()));
+			stmt.setString(index++, DbUtils.trim(user.getEmail()));
+			stmt.setString(index++, DbUtils.trim(user.getUsername()));
+			stmt.setString(index++, DbUtils.trim(user.getPassword()));
+			stmt.setString(index++, DbUtils.trim(user.getServerRelativePath()));
 			stmt.setLong(index++, user.getId());
 			
 			int res = stmt.executeUpdate();	
@@ -203,28 +207,6 @@ public class UserDAOImpl implements UserDAO{
 		return false;
 	}
 
-	private long getUserId(Connection conn) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		long userId = 0;
-		
-		try {
-			String idQuery = "Select @@id as id";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(idQuery);
-			
-			rs.next();
-			
-			userId = rs.getLong("id");
-		} catch (SQLException e) {
-			
-		} finally {
-			DbUtils.closeConn(null, stmt, rs);
-		}
-		
-		return userId;
-	}
-	
 	private void setUserProperties(ResultSet rs, User user) throws SQLException{
 		if (rs == null) {
 			return;
@@ -239,5 +221,7 @@ public class UserDAOImpl implements UserDAO{
 		user.setEmail(rs.getString("email"));
 		user.setUsername(rs.getString("username"));
 		user.setPassword(rs.getString("password"));
+		user.setServerRelativePath(rs.getString("relative_path"));
 	}
+
 }

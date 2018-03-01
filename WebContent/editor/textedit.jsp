@@ -8,8 +8,10 @@
 </head>
 <body>
 	<h1>Welcome to text editor area ${currentLoggedUser.username}</h1>
+	<span>${status}</span><br>
 	
-	<form action="save" method="post">
+	<form action="textedit" method="post">
+		<input type="hidden" name="action" value="save">
 		<label>Begin writing your document.</label><br>
 		<textarea name="textarea" rows="75" cols="100"></textarea>
 		
@@ -18,5 +20,8 @@
 		<input type="submit" name="saveFile" value="Save Text">
 	</form>
 	
+	<form action="manage" method="get">
+		<input type="submit" name="manage" value="Manage Files">
+	</form>
 </body>
 </html>

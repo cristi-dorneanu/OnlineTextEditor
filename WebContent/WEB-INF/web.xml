@@ -17,6 +17,7 @@
 	<servlet-mapping>
 		<servlet-name>TextEditorServlet</servlet-name>
 		<url-pattern>/textedit</url-pattern>
+		<url-pattern>/manage</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

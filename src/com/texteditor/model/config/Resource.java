@@ -4,9 +4,12 @@ public enum Resource {
 	login("/login"),
 	signup("/signup"),
 	textedit("/textedit"),
-	manage("/manage");
+	manage("/manage"),
+	view("/view"),
+	edit("/edit"),
+	delete("/delete");
 	
-	private static final String app = "/OnlineTextEditor";
+	private static final String app = "/OnlineTextEditorWork";
 	private String resource;
 	
 	private Resource(String resource) {
