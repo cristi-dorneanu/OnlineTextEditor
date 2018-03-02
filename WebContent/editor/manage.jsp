@@ -30,9 +30,9 @@
 					<td>${file.dateAdded}</td>
 					<td>${file.dateLastModified}</td>
 					<td>
-						<a href="/view-file?id=${file.id}">View</a>
-						<a href="/edit-file?id=${file.id}">Edit</a>
-						<a href="/delete-file?id=${file.id}">Delete</a>
+						<a href="/OnlineTextEditorWork/view-file?id=${file.id}">View</a>
+						<a href="/OnlineTextEditorWork/edit-file?id=${file.id}">Edit</a>
+						<a href="/OnlineTextEditorWork/delete-file?id=${file.id}">Delete</a>
 					</td>
 				</tr>
 			</c:forEach>

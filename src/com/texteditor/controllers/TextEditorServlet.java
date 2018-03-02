@@ -30,6 +30,7 @@ public class TextEditorServlet  extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String uri = req.getRequestURI();
 		FileDAO fileDao = new FileDAOImpl();
+		FileDAOManager fileManager = new FileDAOManagerImpl();
 		String url = "/";
 		
 		User loggedUser = (User) req.getSession().getAttribute("currentLoggedUser");
@@ -46,6 +47,38 @@ public class TextEditorServlet  extends HttpServlet{
 			
 			req.setAttribute("files", files);
 			url = "/editor/manage.jsp";
+		} else if (ControllerUtils.isPath(uri, Resource.delete)) {
+			long id = Long.parseLong(req.getParameter("id"));
+			File file = fileDao.getFile(id);
+			
+			if(file != null && fileManager.deleteFromDisk(file) && fileDao.deleteFile(loggedUser.getId(), id)) {
+				req.setAttribute("status", "success");
+			} else {
+				req.setAttribute("status", "shit");
+			}
+			
+			resp.sendRedirect(Resource.manage.url());
+			return;
+		} else if (ControllerUtils.isPath(uri, Resource.edit)) {
+			long id = Long.parseLong(req.getParameter("id"));
+			File file = fileDao.getFile(id);
+			StringBuffer sb = fileManager.getFileContents(file);
+			
+			if(sb != null) {
+				url = Resource.textedit.resource();
+				req.setAttribute("content", sb.toString());
+			}
+		} else if (ControllerUtils.isPath(uri, Resource.view)) {
+			long id = Long.parseLong(req.getParameter("id"));
+			File file = fileDao.getFile(id);
+			StringBuffer sb = fileManager.getFileContents(file);
+			
+			if(sb != null) {
+				url = Resource.textedit.resource();
+				req.setAttribute("isView", true);
+				req.setAttribute("content", sb.toString());
+			}
+			
 		}
 		
 		getServletContext().getRequestDispatcher(url).forward(req, resp);
@@ -78,7 +111,6 @@ public class TextEditorServlet  extends HttpServlet{
 					}
 				}
 				
-				req.setAttribute("status", "shit");
 				url = "/editor/textedit.jsp";
 			}
 		}

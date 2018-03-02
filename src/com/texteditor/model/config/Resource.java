@@ -5,9 +5,9 @@ public enum Resource {
 	signup("/signup"),
 	textedit("/textedit"),
 	manage("/manage"),
-	view("/view"),
-	edit("/edit"),
-	delete("/delete");
+	view("/view-file"),
+	edit("/edit-file"),
+	delete("/delete-file");
 	
 	private static final String app = "/OnlineTextEditorWork";
 	private String resource;

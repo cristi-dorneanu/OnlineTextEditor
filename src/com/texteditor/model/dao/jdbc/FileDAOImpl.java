@@ -77,7 +77,7 @@ public class FileDAOImpl implements FileDAO{
 			rs = stmt.executeQuery();
 			
 			if(rs.next()) {
-				this.setFileProperties(file, rs);
+				file = this.setFileProperties(file, rs);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -155,16 +155,14 @@ public class FileDAOImpl implements FileDAO{
 		
 		try {
 			conn = ConnectionFactory.getConnection();
-			stmt = conn.prepareStatement("DELETE FROM FILES WHERE id = ?");
-			stmt.setLong(1, fileId);
-			
-			int res = stmt.executeUpdate();
-			
 			stmtMap = conn.prepareStatement("DELETE FROM USER_TO_FILES WHERE id_user = ? and id_file = ?");
 			stmtMap.setLong(1, userId);
 			stmtMap.setLong(2, fileId);
+			int res = stmtMap.executeUpdate();
 			
-			res = stmtMap.executeUpdate();
+			stmt = conn.prepareStatement("DELETE FROM FILES WHERE id = ?");
+			stmt.setLong(1, fileId);
+			res = stmt.executeUpdate();
 			
 			return res == 1 ? true : false;
 		} catch (SQLException e) {

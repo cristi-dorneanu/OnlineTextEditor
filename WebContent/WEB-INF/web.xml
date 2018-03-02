@@ -18,6 +18,9 @@
 		<servlet-name>TextEditorServlet</servlet-name>
 		<url-pattern>/textedit</url-pattern>
 		<url-pattern>/manage</url-pattern>
+		<url-pattern>/delete-file</url-pattern>
+		<url-pattern>/view-file</url-pattern>
+		<url-pattern>/edit-file</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
